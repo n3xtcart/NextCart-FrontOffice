@@ -1,0 +1,82 @@
+.container {
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f4f2eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  background-image: url('../spsesabackground.jpg');
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+}
+.registrazione-container {
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f945;
+}
+
+h2 {
+  text-align: center;
+  color: #034051; /* Colore del titolo */
+}
+
+form div {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  color: #034051; /* Colore del testo della label */
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:disabled {
+  background-color: #aaccee;
+  cursor: not-allowed;
+}
+
+a {
+  text-decoration: none !important;
+  color: #034051; /* Colore del link */
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.container img {
+  width: 15%;           
+  margin-bottom: 15px;
+}
+
+.card-img-top {
+  height: 150px !important;
+  object-fit: cover;
+}
