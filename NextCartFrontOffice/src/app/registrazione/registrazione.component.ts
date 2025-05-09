@@ -9,16 +9,15 @@ import { FormsModule } from '@angular/forms';
 })
 export class RegistrazioneComponent {
 
-  nome: string = '';
   email: string = '';
   password: string = '';
 
   constructor() {}
 
   onSubmit() {
-    console.log('Nome:', this.nome);
     console.log('Email:', this.email);
     console.log('Password:', this.password);
+    
     // logica per inviare i dati al backend quando sarà pronto
   }
 }

@@ -94,4 +94,29 @@ button:disabled {
   justify-content: center;  
 }
 
+/* Responsive layout per dispositivi mobili */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column-reverse;
+  }
 
+  .image-section,
+  .login-section {
+    flex: none;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .image-section img {
+    height: 200px;
+    border-radius: 0;
+  }
+
+  .login-section {
+    padding: 20px;
+  }
+
+  #logo {
+    max-width: 150px;
+  }
+}

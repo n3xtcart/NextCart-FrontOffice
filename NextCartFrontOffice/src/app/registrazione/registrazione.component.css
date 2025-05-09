@@ -2,16 +2,16 @@
   height: 100vh;
   font-family: Arial, sans-serif;
   text-align: center;
-  background-color: #f4f2eb;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0;
-  background-image: url('../spsesabackground.jpg');
+  background-image: url('/assets/background.jpg'); 
   background-size: cover; 
   background-position: center; 
   background-repeat: no-repeat; 
 }
+
 .registrazione-container {
   width: 500px;
   margin: 0 auto;
@@ -19,12 +19,12 @@
   border: 2px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f945;
+  background-color: #f4f2eb;
 }
 
-h2 {
-  text-align: center;
-  color: #034051; /* Colore del titolo */
+h3 {
+  margin-bottom: 20px;
+  font-size: 20px;
 }
 
 form div {
@@ -33,7 +33,7 @@ form div {
 
 label {
   display: block;
-  color: #034051; /* Colore del testo della label */
+  color: #034051;  
 }
 
 input {
@@ -65,18 +65,42 @@ button:disabled {
 
 a {
   text-decoration: none !important;
-  color: #034051; /* Colore del link */
+  color: #034051;  
   display: block;
   text-align: center;
   margin-top: 15px;
 }
 
-.container img {
-  width: 15%;           
-  margin-bottom: 15px;
-}
+
 
 .card-img-top {
   height: 150px !important;
   object-fit: cover;
+}
+
+#logo {
+  max-width: 200px;
+  height: auto;
+}
+
+.logo {
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive layout per dispositivi mobili */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .registrazione-container {
+    flex: none;
+    width: auto;
+    height: auto;
+  }
+
+  #logo {
+    max-width: 150px;
+  }
 }

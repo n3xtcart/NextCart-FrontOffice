@@ -1,0 +1,67 @@
+<div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar sinistra -->
+      <div class="col-md-2 bg-light vh-100 p-0">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active bg-primary text-white" href="#">Categorie prodotto</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="#">La mia lista</a>
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Contenuto principale -->
+      <div class="col-md-10 p-4">
+        <h2 class="mb-4">Categorie prodotto</h2>
+        <div class="row">
+          <div class="col-sm-6 col-md-4 col-lg-3 mb-4" *ngFor="let cat of categorie">
+            <div class="card h-100">
+              <img [src]="cat.immagine" class="card-img-top" style="height: 120px; object-fit: cover;" />
+              <div class="card-body text-center">
+                <h5 class="card-title">{{ cat.nome }}</h5>
+                <p class="card-text">N. prodotti: {{ cat.numeroProdotti }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card m-2" style="width: 18rem;">
+        <img src="assets/img/frutta.jpg" class="card-img-top" alt="Immagine Frutta">
+        <div class="card-body">
+          <h5 class="card-title">Frutta & Verdura</h5>
+          <p class="card-text">N. prodotti: 4</p>
+          <button class="btn btn-sm btn-primary" (click)="apriModale('Mela', 'Frutta & Verdura')">
+            Aggiungi
+          </button>
+        </div>
+      </div>
+      
+  
+    <!-- Footer barra lista -->
+    <div class="position-fixed bottom-0 start-0 w-100 bg-white border-top p-3 d-flex justify-content-between align-items-center">
+      <div>
+        <i class="fas fa-pen me-2"></i>
+        Lista Esselunga
+      </div>
+      <div>
+        Data: 26/10/2020 | N. prodotti: 4 | Prodotti acquistati: 1/4
+      </div>
+      <div style="width: 200px">
+        <div class="progress">
+          <div class="progress-bar" style="width: 25%"></div>
+        </div>
+      </div>
+    </div>
+
+    <app-modale-aggiungi-prodotto
+    [nomeProdotto]="prodottoSelezionato.nome"
+    [categoria]="prodottoSelezionato.categoria"
+    (confermaProdotto)="aggiungiAllaLista($event)">
+  </app-modale-aggiungi-prodotto>
+  
+  </div>
+  
