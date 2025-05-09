@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
-
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  imports: [RouterOutlet],
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'La mia app Angular';
+  constructor(private router: Router) {}
 }

@@ -1,50 +1,44 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';  // <-- Import CommonModule
-import { ListaSpesaService, Prodotto } from '../servizi/lista-spesa.service';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+
+interface Prodotto {
+  nome: string;
+  quantita: number;
+  acquistato: boolean;
+}
 
 @Component({
   selector: 'app-la-mia-lista',
-  standalone: true,
-  imports: [CommonModule],  // <-- Add CommonModule here
-  templateUrl: './la-mia-lista.component.html'
+  templateUrl: './la-mia-lista.component.html',
+  imports: [FormsModule, CommonModule, RouterModule],
+  styleUrls: ['./la-mia-lista.component.css']
 })
-export class LaMiaListaComponent implements OnInit {
-  constructor(private listaService: ListaSpesaService) {}
+export class LaMiaListaComponent {
+  dropdownVisible = false;
+  listaSelezionata: { nome: string; prodotti: Prodotto[] } | null = null;
 
-  listaPerCategoria: { [categoria: string]: Prodotto[] } = {};
+  liste = [
+    { nome: 'Lista Spesa', prodotti: [
+      { nome: 'Pane', quantita: 2, acquistato: false },
+      { nome: 'Latte', quantita: 1, acquistato: false }
+    ]},
+    { nome: 'Festa', prodotti: [
+      { nome: 'Patatine', quantita: 3, acquistato: false }
+    ]}
+  ];
 
-  ngOnInit() {
-    this.aggiornaVista();
+  toggleDropdown() {
+    this.dropdownVisible = !this.dropdownVisible;
   }
 
-  aggiornaVista() {
-    this.listaPerCategoria = this.listaService.getProdottiPerCategoria();
+  selezionaLista(lista: any) {
+    this.listaSelezionata = lista;
   }
 
-  get totaleProdotti(): number {
-    return this.listaService.getTotale();
-  }
-
-  get prodottiAcquistati(): number {
-    return this.listaService.getAcquistati();
-  }
-
-  get progressPercent(): number {
-    return this.totaleProdotti > 0
-      ? (this.prodottiAcquistati / this.totaleProdotti) * 100
-      : 0;
-  }
-
-  rimuoviProdotto(categoria: string, prodotto: Prodotto) {
-    this.listaService.rimuoviProdotto(prodotto);
-    this.aggiornaVista();
-  }
-
-  aggiornaCheck(prodotto: Prodotto, event: Event) {
-    const target = event.target as HTMLInputElement;
-    const checked = target.checked;
-    this.listaService.aggiornaStato(prodotto, checked);
-    this.aggiornaVista();
+  rimuoviProdotto(prodotto: Prodotto) {
+    // Ora TypeScript sa che la lista è un array di prodotti
+    this.listaSelezionata!.prodotti = this.listaSelezionata!.prodotti.filter((p: Prodotto) => p !== prodotto);
   }
 }
-

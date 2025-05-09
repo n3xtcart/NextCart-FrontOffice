@@ -1,0 +1,36 @@
+<div class="container">
+    <aside class="sidebar">
+      <button (click)="toggleDropdown()">Categorie</button>
+      <ul *ngIf="dropdownVisible">
+        <li *ngFor="let categoria of categorie" (click)="selezionaCategoria(categoria)">
+          {{ categoria.nome }}
+        </li>
+      </ul>
+    </aside>
+  
+    <main class="content">
+      <div *ngIf="!categoriaSelezionata">
+        <h2>Tutte le categorie</h2>
+        <div class="card-grid">
+          <div class="card" *ngFor="let categoria of categorie">
+            <img [src]="categoria.img" alt="Categoria">
+            <h3>{{ categoria.nome }}</h3>
+            <p>{{ categoria.numeroProdotti }} prodotti</p>
+          </div>
+        </div>
+      </div>
+  
+      <div *ngIf="categoriaSelezionata">
+        <h2>{{ categoriaSelezionata.nome }}</h2>
+        <div class="card-grid">
+          <div class="card" *ngFor="let prodotto of categoriaSelezionata.prodotti">
+            <img [src]="prodotto.img" alt="Prodotto">
+            <h4>{{ prodotto.nome }}</h4>
+            <p>Quantità: {{ prodotto.quantita }}</p>
+            <button (click)="aggiungiAllaLista(prodotto)">+</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  

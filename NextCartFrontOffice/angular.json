@@ -34,12 +34,12 @@
                 }
               ]
             ,
-            "styles": [              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+            "styles": [              
               "src/styles.css"
 
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+
             ]
           },
           "configurations": {
@@ -57,24 +57,23 @@
                 }
               ],
               "outputHashing": "all",
-              "styles": [                "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "styles": [                
                 "src/styles.css"
 
               ],
               "scripts": [
-                "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+
               ]
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "styles": [                "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "styles": [ 
                 "src/styles.css"
 
               ],
               "scripts": [
-                "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
               ]
             }
           },
