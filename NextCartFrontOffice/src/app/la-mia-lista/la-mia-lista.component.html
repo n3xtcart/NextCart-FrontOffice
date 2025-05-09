@@ -1,24 +1,39 @@
-
 <div class="container">
-    <aside class="sidebar">
-      <button (click)="toggleDropdown()">Le mie liste</button>
-      <ul *ngIf="dropdownVisible">
-        <li *ngFor="let lista of liste" (click)="selezionaLista(lista)">
-          {{ lista.nome }}
-        </li>
-      </ul>
-    </aside>
-  
-    <main class="content">
-      <h2>Lista: {{ listaSelezionata?.nome || 'Nessuna selezionata' }}</h2>
-      <table class="lista-table" *ngIf="listaSelezionata">
-        <tr *ngFor="let prodotto of listaSelezionata.prodotti">
-          <td><input type="checkbox" [(ngModel)]="prodotto.acquistato"></td>
-          <td>{{ prodotto.nome }}</td>
-          <td>{{ prodotto.quantita }}</td>
-          <td><button (click)="rimuoviProdotto(prodotto)">X</button></td>
-        </tr>
-      </table>
-    </main>
-  </div>
-  
+  <aside class="sidebar">
+    <!-- Pulsante per aprire il dropdown delle liste -->
+    <button (click)="toggleDropdown()">Le mie liste</button>
+    
+    <!-- Elenco delle liste -->
+    <ul *ngIf="dropdownVisible">
+      <li *ngFor="let lista of tutteLeListe" (click)="selezionaLista(lista)">
+        {{ lista.nome }}
+      </li>
+    </ul>
+
+    <!-- Input e pulsante per creare una nuova lista -->
+    <div class="nuova-lista">
+      <input [(ngModel)]="nomeNuovaLista" placeholder="Nuova lista" />
+      <button (click)="creaNuovaLista()">+</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <!-- Nome della lista selezionata -->
+    <h2>Lista: {{ listaSelezionata?.nome || 'Nessuna selezionata' }}</h2>
+
+    <!-- Tabella dei prodotti della lista selezionata -->
+    <table class="lista-table" *ngIf="listaSelezionata">
+      <tr *ngFor="let prodotto of listaSelezionata.prodotti">
+        <td>
+          <input type="checkbox" [(ngModel)]="prodotto.acquistato">
+        </td>
+        <td>{{ prodotto.nome }}</td>
+        <td>{{ prodotto.quantita }}</td>
+        <td>
+          <button (click)="rimuoviProdotto(prodotto)">X</button>
+        </td>
+      </tr>
+    </table>
+  </main>
+</div>
+

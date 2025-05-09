@@ -1,44 +1,60 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { ListaService, Lista, Prodotto } from '../lista.service';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-
-interface Prodotto {
-  nome: string;
-  quantita: number;
-  acquistato: boolean;
-}
 
 @Component({
   selector: 'app-la-mia-lista',
   templateUrl: './la-mia-lista.component.html',
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [ 
+    CommonModule, FormsModule
+  ],
   styleUrls: ['./la-mia-lista.component.css']
 })
 export class LaMiaListaComponent {
   dropdownVisible = false;
-  listaSelezionata: { nome: string; prodotti: Prodotto[] } | null = null;
+  tutteLeListe: Lista[] = [];
+  listaSelezionata: Lista | null = null;
+  nomeNuovaLista: string = '';
 
-  liste = [
-    { nome: 'Lista Spesa', prodotti: [
-      { nome: 'Pane', quantita: 2, acquistato: false },
-      { nome: 'Latte', quantita: 1, acquistato: false }
-    ]},
-    { nome: 'Festa', prodotti: [
-      { nome: 'Patatine', quantita: 3, acquistato: false }
-    ]}
-  ];
+  constructor(private listaService: ListaService) {
+    this.tutteLeListe = this.listaService.getListe();
+    this.listaSelezionata = this.listaService.getListaCorrente();
+  }
 
   toggleDropdown() {
     this.dropdownVisible = !this.dropdownVisible;
   }
 
-  selezionaLista(lista: any) {
-    this.listaSelezionata = lista;
+  selezionaLista(lista: Lista) {
+    this.listaService.selezionaLista(lista.nome);
+    this.listaSelezionata = this.listaService.getListaCorrente();
   }
 
   rimuoviProdotto(prodotto: Prodotto) {
-    // Ora TypeScript sa che la lista è un array di prodotti
-    this.listaSelezionata!.prodotti = this.listaSelezionata!.prodotti.filter((p: Prodotto) => p !== prodotto);
+    if (!this.listaSelezionata) return;
+    this.listaService.rimuoviProdotto(this.listaSelezionata.nome, prodotto);
+    // ricarica la lista aggiornata
+    this.listaSelezionata = this.listaService.getListaCorrente();
+  }
+
+  creaNuovaLista() {
+    const nome = this.nomeNuovaLista.trim();
+    if (!nome || this.tutteLeListe.find(l => l.nome === nome)) return;
+
+    const nuovaLista: Lista = { nome, prodotti: [] };
+    this.tutteLeListe.push(nuovaLista);
+    this.listaService.selezionaLista(nuovaLista.nome);
+    this.salvaListe();
+
+    this.listaSelezionata = this.listaService.getListaCorrente();
+    this.nomeNuovaLista = '';
+  }
+
+  // metodo per forzare il salvataggio
+  private salvaListe() {
+    localStorage.setItem('listeUtente', JSON.stringify(this.tutteLeListe));
   }
 }
+
+

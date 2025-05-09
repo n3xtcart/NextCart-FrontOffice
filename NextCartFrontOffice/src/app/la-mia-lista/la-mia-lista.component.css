@@ -53,3 +53,12 @@
     border-bottom: 1px solid #ccc;
   }
   
+  .nuova-lista {
+    margin-top: 20px;
+  }
+  
+  .nuova-lista input {
+    margin-right: 10px;
+  }
+  
+  
