@@ -1,0 +1,34 @@
+<header class="top-navbar">
+  <img src="assets/NEXTR3CART.png" alt="Logo" class="logo">
+  <a routerLink="/profilo">
+    <img src="assets/avatar.png" alt="Logo" class="logo">
+  </a>
+  </header>
+
+
+<nav class="side-navbar">
+  <a routerLink="/home/categoria-prodotto" routerLinkActive="active" (click)="toggleDropdown()">Categoria Prodotti</a>
+  <aside class="sidebar" *ngIf="isCatPage()">
+    <ul *ngIf="dropdownVisible">
+      <li *ngFor="let categoria of categorie" (click)="selezionaCategoria(categoria)">
+        {{ categoria.nome }}
+      </li>
+    </ul>
+  </aside>
+
+  <a routerLink="/home/la-mia-lista" routerLinkActive="active" >La tua lista</a>
+  <aside class="sidebar" *ngIf="isListaPage()">
+    <button (click)="toggleDropdown()">Le mie liste</button>
+    
+    <ul *ngIf="dropdownVisible">
+      <li *ngFor="let lista of tutteLeListe" (click)="selezionaLista(lista)">
+        {{ lista.nome }}
+      </li>
+    </ul>
+
+    <div class="nuova-lista">
+      <input [(ngModel)]="nomeNuovaLista" placeholder="Nuova lista" />
+      <button (click)="creaNuovaLista()">+</button>
+    </div>
+  </aside>
+</nav>

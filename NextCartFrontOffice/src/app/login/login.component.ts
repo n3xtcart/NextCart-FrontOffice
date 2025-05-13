@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,11 +10,16 @@ import { FormsModule } from '@angular/forms';
 })
 export class LoginComponent {
 
+
   email: string = '';
   password: string = '';
 
-  constructor() {}
+  constructor(private router: Router) {}
 
+  accedi() {
+    this.router.navigate(['/home']);
+  }
+  
   onSubmit() {
     console.log('Email:', this.email);
     console.log('Password:', this.password);
@@ -21,5 +27,7 @@ export class LoginComponent {
     // logica per inviare i dati al backend quando sarà pronto
   }
 }
+
+
 
 

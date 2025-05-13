@@ -1,49 +1,28 @@
-// categoria-prodotto.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CategoriaService } from '../categoria.service';
+import { ListaService } from '../lista.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { ListaService } from '../lista.service'; // <-- importa il servizio
 
 @Component({
   selector: 'app-categoria-prodotto',
+  imports: [CommonModule],
   templateUrl: './categoria-prodotto.component.html',
-  imports: [FormsModule, CommonModule, RouterModule],
-  styleUrls: ['./categoria-prodotto.component.css'],
-  standalone: true
+  styleUrl: './categoria-prodotto.component.css'
 })
-export class CategoriaProdottoComponent {
-  dropdownVisible = false;
+export class CategoriaProdottoComponent implements OnInit {
+  categorie: any[] = [];
   categoriaSelezionata: any = null;
 
-  categorie = [
-    {
-      nome: 'Frutta',
-      img: 'assets/frutta.jpg',
-      numeroProdotti: 5,
-      prodotti: [
-        { nome: 'Mela', img: 'assets/mela.jpg', quantita: 10 },
-        { nome: 'Banana', img: 'assets/banana.jpg', quantita: 8 }
-      ]
-    },
-    {
-      nome: 'Verdura',
-      img: 'assets/verdura.jpg',
-      numeroProdotti: 3,
-      prodotti: [
-        { nome: 'Carota', img: 'assets/carota.jpg', quantita: 6 }
-      ]
-    }
-  ];
+  constructor(
+    private categoriaService: CategoriaService,
+    private listaService: ListaService
+  ) {}
 
-  constructor(private listaService: ListaService) {}
-
-  toggleDropdown() {
-    this.dropdownVisible = !this.dropdownVisible;
-  }
-
-  selezionaCategoria(categoria: any) {
-    this.categoriaSelezionata = categoria;
+  ngOnInit() {
+    this.categorie = this.categoriaService.getCategorie();
+    this.categoriaService.categoriaSelezionata$.subscribe(categoria => {
+      this.categoriaSelezionata = categoria;
+    });
   }
 
   aggiungiAllaLista(prodotto: any) {
@@ -55,4 +34,3 @@ export class CategoriaProdottoComponent {
     this.listaService.aggiungiProdottoALista('Lista Spesa', prodottoFormattato);
   }
 }
-

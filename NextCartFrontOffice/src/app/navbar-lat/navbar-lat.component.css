@@ -1,0 +1,59 @@
+/* Navbar orizzontale */
+.top-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ff9f31;
+  padding: 10px;
+  color: white;
+  height: 100%;
+  
+  
+}
+
+.logo {
+  height: 70px;
+  border-radius: 50%; 
+  object-fit: cover;
+  margin: 0 20px; 
+
+}
+
+
+
+/* Sidebar verticale */
+.side-navbar {
+  position: fixed;
+  top: 95px; 
+  width: 200px;
+  height: calc(100vh - 60px);
+  background-color: #034051;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+
+}
+
+.side-navbar a {
+  padding: 15px 20px;
+  text-decoration: none;
+  color: white;
+}
+
+.side-navbar a.active {
+  font-weight: bold;
+  background-color: #d0d0d07f;
+}
+
+button, .nuova-lista {
+margin-left: 3%;
+font-family: Arial, sans-serif;
+}
+
+ul li {
+  color: white;
+  margin-left: 3%;
+  font-family: Arial, sans-serif;
+}
+

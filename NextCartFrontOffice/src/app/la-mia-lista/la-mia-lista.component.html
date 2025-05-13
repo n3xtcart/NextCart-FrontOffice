@@ -1,26 +1,7 @@
 <div class="container">
-  <aside class="sidebar">
-    <button (click)="toggleDropdown()">Le mie liste</button>
-    
-    <!-- Elenco delle liste -->
-    <ul *ngIf="dropdownVisible">
-      <li *ngFor="let lista of tutteLeListe" (click)="selezionaLista(lista)">
-        {{ lista.nome }}
-      </li>
-    </ul>
-
-    <!-- Input e pulsante per creare una nuova lista -->
-    <div class="nuova-lista">
-      <input [(ngModel)]="nomeNuovaLista" placeholder="Nuova lista" />
-      <button (click)="creaNuovaLista()">+</button>
-    </div>
-  </aside>
-
   <main class="content">
-    <!-- Nome della lista selezionata -->
     <h2>Lista: {{ listaSelezionata?.nome || 'Nessuna selezionata' }}</h2>
 
-    <!-- Tabella dei prodotti della lista selezionata -->
     <table class="lista-table" *ngIf="listaSelezionata">
       <tr *ngFor="let prodotto of listaSelezionata.prodotti">
         <td>

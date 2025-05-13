@@ -1,45 +1,14 @@
 .container {
   height: 100vh;
   font-family: Arial, sans-serif;
+  background: #f9f9f9;
   display: flex;
   margin: 0;
   }
   
-  .sidebar {
-    width: 200px;
-    background: #f4f2eb;
-    color: rgb(0, 0, 0);
-    padding: 15px;
-  }
-  
-  .sidebar button {
-    width: 100%;
-    padding: 10px;
-    background: #ff9f31;
-    border: none;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .sidebar ul {
-    list-style: none;
-    padding-left: 10px;
-    margin-top: 10px;
-  }
-  
-  .sidebar li {
-    cursor: pointer;
-    padding: 5px;
-  }
-  
-  .sidebar li:hover {
-    text-decoration: underline;
-  }
-  
+
   .content {
     flex: 1;
-    padding: 20px;
-    background: #f4f2eb;
   }
   
   .lista-table {
@@ -53,12 +22,6 @@
     border-bottom: 1px solid #ccc;
   }
   
-  .nuova-lista {
-    margin-top: 20px;
-  }
-  
-  .nuova-lista input {
-    margin-right: 10px;
-  }
+
   
   

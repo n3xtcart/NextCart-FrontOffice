@@ -26,7 +26,7 @@
           placeholder="Inserisci la tua password"
         />
       </div>
-      <button type="submit" [disabled]="!loginForm.form.valid">Accedi</button>
+      <button type="submit" [disabled]="!loginForm.form.valid" (click)="accedi()">Accedi</button>
       <div class="crea-account">
         <a href="/registrazione">Crea un account</a>
       </div>
