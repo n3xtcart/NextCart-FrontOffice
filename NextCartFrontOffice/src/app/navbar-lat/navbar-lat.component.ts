@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { ListaService, Lista, Prodotto } from '../lista.service';
+import { ListaService } from '../lista.service';
 import { FormsModule } from '@angular/forms';
 import { CategoriaService } from '../categoria.service';
+import { Lista } from '../_models/lista';
 
 @Component({
   selector: 'app-navbar-lat',
@@ -19,9 +20,23 @@ export class NavbarLatComponent {
     nomeNuovaLista: string = '';
   
     constructor(private listaService: ListaService, private router: Router, private categoriaService: CategoriaService) {
-      this.tutteLeListe = this.listaService.getListe();
-      this.listaSelezionata = this.listaService.getListaCorrente();
-      this.categorie = this.categoriaService.getCategorie();
+      this.listaService.getListe().subscribe(liste => {
+        this.tutteLeListe = liste;
+      });
+    
+      this.listaService.listaCorrente$.subscribe(lista => {
+        this.listaSelezionata = lista;
+      });
+    
+      this.categoriaService.getCategorie().subscribe(categorie => {
+        this.categorie = categorie;
+      });
+    }
+
+    ngOnInit(): void {
+      this.categoriaService.getCategorie().subscribe(categorie => {
+        this.categorie = categorie;
+      });
     }
 
     categorie: any[] = [];
@@ -42,28 +57,30 @@ export class NavbarLatComponent {
   
     creaNuovaLista() {
       const nome = this.nomeNuovaLista.trim();
-      if (!nome || this.tutteLeListe.find(l => l.nome === nome)) return;
+      if (!nome || this.tutteLeListe.find(l => l.nomeLista === nome)) return;
     
       this.listaService.creaLista(nome);
-      this.tutteLeListe = this.listaService.getListe(); 
-      this.nomeNuovaLista = '';
+      this.listaService.getListe().subscribe(liste => {
+        this.tutteLeListe = liste;
+      });
+            this.nomeNuovaLista = '';
     }
     
     selezionaLista(lista: Lista) {
-      this.listaService.selezionaLista(lista.nome);
+      this.listaService.selezionaLista(lista.nomeLista);
     }
 
     selezionaCategoria(categoria: any) {
       this.categoriaService.selezionaCategoria(categoria);
     }
   
-    aggiungiAllaLista(prodotto: any) {
+    /*aggiungiAllaLista(prodotto: any) {
       const prodottoFormattato = {
         nome: prodotto.nome,
         quantita: prodotto.quantita,
         acquistato: false
       };
       this.listaService.aggiungiProdottoALista('Lista Spesa', prodottoFormattato);
-    }
+    }*/
     
 }

@@ -32,3 +32,19 @@
   object-fit: cover;
   border-radius: 5px;
 }
+
+
+.indietro-btn {
+  background-color: #eeeeee;
+  border: none;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.indietro-btn:hover {
+  background-color: #dddddd;
+}

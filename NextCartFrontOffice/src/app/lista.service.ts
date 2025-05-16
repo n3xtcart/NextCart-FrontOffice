@@ -1,96 +1,75 @@
 
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Lista } from './_models/lista';
+import { ProdottoListaSpesa } from './_models/prodottoListaSpesa';
 
-export interface Prodotto {
-  nome: string;
-  quantita: number;
-  acquistato: boolean;
-}
-
-export interface Lista {
-  nome: string;
-  prodotti: Prodotto[];
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ListaService {
   private readonly STORAGE_KEY = 'listeUtente';
-  private liste: Lista[] = [];
+  liste: Lista[] = [];
   private listaCorrenteSubject = new BehaviorSubject<Lista | null>(null);
   listaCorrente$ = this.listaCorrenteSubject.asObservable();
 
-  constructor() {
-    const salvate = localStorage.getItem(this.STORAGE_KEY);
-    if (salvate) {
-      this.liste = JSON.parse(salvate);
-    } else {
-      // Dati di default alla prima apertura
-      this.liste = [
-        {
-          nome: 'Lista Spesa',
-          prodotti: [
-            { nome: 'Pane', quantita: 2, acquistato: false },
-            { nome: 'Latte', quantita: 1, acquistato: false }
-          ]
-        },
-        {
-          nome: 'Festa',
-          prodotti: [
-            { nome: 'Patatine', quantita: 3, acquistato: false }
-          ]
-        }
-      ];
-      this.salva();
-    }
+  private apiUrl = 'https://6826ef9b397e48c91317d97b.mockapi.io/lista'; // da richiedere al BackOffice
+  
 
-    // Imposta lista corrente alla prima della lista (se esiste)
-    if (this.liste.length > 0) {
-      this.listaCorrenteSubject.next(this.liste[0]);
-    }
+  constructor(private http: HttpClient) {
+    this.getListe().subscribe(liste => {
+      this.liste = liste;
+    });
   }
+
+    getListe(): Observable<Lista[]> {
+      return this.http.get<Lista[]>(this.apiUrl);
+    }
 
   private salva(): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.liste));
   }
 
-  getListe(): Lista[] {
-    return this.liste;
-  }
-
-  getListaCorrente(): Lista | null {
-    return this.listaCorrenteSubject.value;
-  }
-
   selezionaLista(nomeLista: string): void {
-    const lista = this.liste.find(l => l.nome === nomeLista) || null;
+    const lista = this.liste.find(l => l.nomeLista === nomeLista) || null;
     this.listaCorrenteSubject.next(lista);
   }
 
-  aggiungiProdottoALista(nomeLista: string, prodotto: Prodotto): void {
-    const lista = this.liste.find(l => l.nome === nomeLista);
+  aggiungiProdottoALista(nomeLista: string, prodotto: ProdottoListaSpesa): void {
+    const lista = this.liste.find(l => l.nomeLista === nomeLista);
     if (lista) {
       lista.prodotti.push(prodotto);
       this.salva();
-      this.listaCorrenteSubject.next({ ...lista }); // notifica aggiornamento
+      this.listaCorrenteSubject.next({ ...lista });
     }
   }
 
-  rimuoviProdotto(nomeLista: string, prodotto: Prodotto): void {
-    const lista = this.liste.find(l => l.nome === nomeLista);
+  rimuoviProdotto(nomeLista: string, prodotto: ProdottoListaSpesa): void {
+    const lista = this.liste.find(l => l.nomeLista === nomeLista);
     if (lista) {
       lista.prodotti = lista.prodotti.filter(p => p !== prodotto);
       this.salva();
-      this.listaCorrenteSubject.next({ ...lista }); // notifica aggiornamento
+      this.listaCorrenteSubject.next({ ...lista }); 
     }
   }
 
-  creaLista(nome: string): void {
-    const nuovaLista: Lista = { nome, prodotti: [] };
+  creaLista(nomeLista: string): void {
+    const nuovaLista: Lista = {
+      idLista: this.generaIdUnico(),  
+      nomeLista: nomeLista,
+      dataPrevista: new Date(),      
+      prodotti: []
+    };
     this.liste.push(nuovaLista);
     this.salva();
-    this.selezionaLista(nome); // notifica e seleziona
+    this.selezionaLista(nomeLista);
   }
+
+  generaIdUnico(): number {
+    return this.liste.length > 0 ? Math.max(...this.liste.map(l => l.idLista)) + 1 : 1;
+  }
+  
+  
 }

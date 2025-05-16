@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ListaService, Lista, Prodotto } from '../lista.service';
+import { ListaService } from '../lista.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Lista } from '../_models/lista';
+import { ProdottoListaSpesa } from '../_models/prodottoListaSpesa';
 
 @Component({
   selector: 'app-la-mia-lista',
@@ -12,6 +14,9 @@ import { Subscription } from 'rxjs';
   ],
   styleUrls: ['./la-mia-lista.component.css']
 })
+
+
+
 export class LaMiaListaComponent implements OnInit, OnDestroy {
   listaSelezionata: Lista | null = null;
   private subscription!: Subscription;
@@ -20,7 +25,23 @@ export class LaMiaListaComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.listaService.listaCorrente$.subscribe(lista => {
-      this.listaSelezionata = lista;
+      if (lista) {
+        this.listaSelezionata = lista;
+        console.log('Lista selezionata aggiornata:', lista);
+      }
+    });
+  
+    // Iniziale fallback: carica tutte le liste se nulla è stato selezionato
+    this.listaService.getListe().subscribe({
+      next: (data) => {
+        if (data.length > 0 && !this.listaSelezionata) {
+          this.listaSelezionata = data[0];
+          this.listaService.selezionaLista(data[0].nomeLista);
+        }
+      },
+      error: (err) => {
+        console.error('Errore nel caricamento delle liste:', err);
+      }
     });
   }
 
@@ -28,11 +49,13 @@ export class LaMiaListaComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  rimuoviProdotto(prodotto: Prodotto) {
+  rimuoviProdotto(prodotto: ProdottoListaSpesa) {
     if (this.listaSelezionata) {
-      this.listaService.rimuoviProdotto(this.listaSelezionata.nome, prodotto);
+      this.listaService.rimuoviProdotto(this.listaSelezionata.nomeLista, prodotto);
     }
   }
+
+  
 }
 
 

@@ -1,14 +1,14 @@
 <div class="container">
   <main class="content">
-    <h2>Lista: {{ listaSelezionata?.nome || 'Nessuna selezionata' }}</h2>
+    <h2>{{ listaSelezionata?.nomeLista }}</h2>
 
     <table class="lista-table" *ngIf="listaSelezionata">
       <tr *ngFor="let prodotto of listaSelezionata.prodotti">
         <td>
-          <input type="checkbox" [(ngModel)]="prodotto.acquistato">
+          <input type="checkbox" [(ngModel)]="prodotto.checkedProdotto">
         </td>
-        <td>{{ prodotto.nome }}</td>
-        <td>{{ prodotto.quantita }}</td>
+        <td>{{ prodotto.nomeProdotto }}</td>
+        <td>{{ prodotto.quantitaProdotto }}</td>
         <td>
           <button (click)="rimuoviProdotto(prodotto)">X</button>
         </td>
