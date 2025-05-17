@@ -1,0 +1,58 @@
+
+
+<div class="dialog-backdrop">
+    <div class="dialog">
+      <div>
+        <h3>Stai aggiungendo alla lista:</h3>
+        <h3>{{ prodotto.nome }}</h3>
+        <br>
+        <h4 class="categoria"> Categoria: {{ prodotto.categoria }}</h4>
+  
+        <div class="row">
+          <div class="form-group">
+            <label for="tipologia">Tipologia quantità:</label>
+            <select id="tipologia" [(ngModel)]="tipologia">
+              <option *ngFor="let tipo of tipologieDisponibili" [value]="tipo">{{ tipo }}</option>
+            </select>
+          </div>
+  
+          <div class="form-group">
+            <label for="quantita">Quantità:</label>
+            <input id="quantita" type="number" [(ngModel)]="quantita" min="1">
+          </div>
+        </div>
+  
+        <div class="form-group centered-note">
+          <label for="note">Note:</label>
+          <textarea id="note" [(ngModel)]="note"></textarea>
+        </div>
+      </div>
+  
+      <div class="bottom-left">
+        <div class="form-group">
+          <label for="lista">Lista:</label>
+          <select id="lista" [(ngModel)]="listaSelezionata">
+            <option *ngFor="let lista of listeSpesa" [value]="lista.nomeLista">
+              {{ lista.nomeLista }}
+            </option>
+            <option value="__new__">+ Nuova lista</option>
+          </select>
+        </div>
+  
+        <div class="form-group" *ngIf="listaSelezionata === '__new__'">
+          <label for="nuovaListaNome">Nome nuova lista:</label>
+          <input id="nuovaListaNome" type="text" placeholder="Inserisci nome nuova lista" [(ngModel)]="nuovaListaNome">
+        </div>
+      </div>
+  
+      <div class="actions">
+        <button (click)="annulla()">Annulla</button>
+        <button (click)="conferma()">Conferma</button>
+      </div>
+    </div>
+  </div>
+
+
+  
+  
+  

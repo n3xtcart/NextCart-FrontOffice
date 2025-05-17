@@ -15,7 +15,13 @@ export class ListaService {
   private listaCorrenteSubject = new BehaviorSubject<Lista | null>(null);
   listaCorrente$ = this.listaCorrenteSubject.asObservable();
 
+  private listeSubject = new BehaviorSubject<Lista[]>([]);
+  liste$ = this.listeSubject.asObservable();
+  
+  
+
   private apiUrl = 'https://6826ef9b397e48c91317d97b.mockapi.io/lista'; // da richiedere al BackOffice
+  
   
 
   constructor(private http: HttpClient) {
@@ -24,9 +30,17 @@ export class ListaService {
     });
   }
 
-    getListe(): Observable<Lista[]> {
-      return this.http.get<Lista[]>(this.apiUrl);
-    }
+  getListe(): Observable<Lista[]> {
+    return new Observable(observer => {
+      this.http.get<Lista[]>(this.apiUrl).subscribe(listeApi => {
+        this.liste = listeApi;
+        this.listeSubject.next(this.liste); // aggiorna i componenti
+        observer.next(this.liste);
+        observer.complete();
+      });
+    });
+  }
+  
 
   private salva(): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.liste));
@@ -65,11 +79,14 @@ export class ListaService {
     this.liste.push(nuovaLista);
     this.salva();
     this.selezionaLista(nomeLista);
+    this.listeSubject.next([...this.liste]); 
   }
+  
 
   generaIdUnico(): number {
     return this.liste.length > 0 ? Math.max(...this.liste.map(l => l.idLista)) + 1 : 1;
   }
+  
   
   
 }

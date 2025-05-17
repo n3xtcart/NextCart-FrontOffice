@@ -29,4 +29,11 @@
   </main>
 </div>
 
+<app-aggiungi-prodotto-dialog
+  *ngIf="prodottoSelezionato"
+  [prodotto]="prodottoSelezionato"
+  (chiudi)="prodottoSelezionato = null"
+  (confermaAggiunta)="aggiungiProdotto($event)">
+</app-aggiungi-prodotto-dialog>
+
   

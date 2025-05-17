@@ -4,16 +4,19 @@ import { ListaService } from '../lista.service';
 import { CommonModule } from '@angular/common';
 import { Categoria } from '../_models/categoria';
 import { ProdottoListaSpesa } from '../_models/prodottoListaSpesa';
+import { AggiungiProdottoDialogComponent } from "../aggiungi-prodotto-dialog/aggiungi-prodotto-dialog.component";
 
 @Component({
   selector: 'app-categoria-prodotto',
-  imports: [CommonModule],
+  imports: [CommonModule, AggiungiProdottoDialogComponent],
   templateUrl: './categoria-prodotto.component.html',
   styleUrl: './categoria-prodotto.component.css'
 })
 export class CategoriaProdottoComponent implements OnInit {
   categorie: Categoria[] = [];
   categoriaSelezionata: any = null;
+  prodottoSelezionato: any = null;
+
 
   constructor(private categoriaService: CategoriaService, private listaService: ListaService) {}
 
@@ -36,18 +39,16 @@ export class CategoriaProdottoComponent implements OnInit {
   }
   
 
-  aggiungiAllaLista(prodotto: ProdottoListaSpesa) {
-    const prodottoFormattato = {
-      idProdottoLista: prodotto.idProdottoLista,
-      nomeProdotto: prodotto.nomeProdotto,
-      categoriaProdotto: prodotto.categoriaProdotto,
-      tipologiaProdotto: prodotto.tipologiaProdotto,
-      quantitaProdotto: prodotto.quantitaProdotto,
-      noteProdotto: prodotto.noteProdotto,
-      checkedProdotto: prodotto.checkedProdotto
-    };
-    this.listaService.aggiungiProdottoALista('Lista Spesa', prodottoFormattato);
+  aggiungiAllaLista(prodotto: any) {
+    this.prodottoSelezionato = prodotto;
   }
+  
+  aggiungiProdotto(event: { nomeLista: string, prodotto: any }) {
+    this.listaService.aggiungiProdottoALista(event.nomeLista, event.prodotto);
+    this.prodottoSelezionato = null;
+  }
+  
+
 
   cliccaCategoria(categoria: any) {
     this.categoriaService.selezionaCategoria(categoria); 

@@ -48,3 +48,27 @@
 .indietro-btn:hover {
   background-color: #dddddd;
 }
+
+.card button {
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  line-height: 1; 
+}
+.card button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.card button:active {
+  transform: scale(0.95);
+}
+
+
+

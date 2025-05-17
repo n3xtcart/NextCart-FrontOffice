@@ -31,6 +31,11 @@ export class NavbarLatComponent {
       this.categoriaService.getCategorie().subscribe(categorie => {
         this.categorie = categorie;
       });
+
+      this.listaService.liste$.subscribe(liste => {
+        this.tutteLeListe = liste;
+      });
+      
     }
 
     ngOnInit(): void {
@@ -73,14 +78,6 @@ export class NavbarLatComponent {
     selezionaCategoria(categoria: any) {
       this.categoriaService.selezionaCategoria(categoria);
     }
-  
-    /*aggiungiAllaLista(prodotto: any) {
-      const prodottoFormattato = {
-        nome: prodotto.nome,
-        quantita: prodotto.quantita,
-        acquistato: false
-      };
-      this.listaService.aggiungiProdottoALista('Lista Spesa', prodottoFormattato);
-    }*/
+
     
 }
