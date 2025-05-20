@@ -45,7 +45,7 @@ export class AggiungiProdottoDialogComponent implements OnInit {
       this.listaSelezionata === '__new__' ? this.nuovaListaNome : this.listaSelezionata;
   
     if (this.listaSelezionata === '__new__' && this.nuovaListaNome.trim() !== '') {
-      this.listaService.creaLista(this.nuovaListaNome.trim());
+      this.listaService.creaLista(this.nuovaListaNome.trim())
     }
   
     const prodottoFormattato = {
@@ -58,7 +58,7 @@ export class AggiungiProdottoDialogComponent implements OnInit {
     };
   
     this.confermaAggiunta.emit({ nomeLista, prodotto: prodottoFormattato });
-
+    console.log("Lista creata: " , nomeLista)
   }
 
 

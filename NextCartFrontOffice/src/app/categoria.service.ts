@@ -9,7 +9,8 @@ import { Observable, Subject } from 'rxjs';
 })
 export class CategoriaService {
 
-  private apiUrl = 'https://6826ef9b397e48c91317d97b.mockapi.io/categorie'; // da richiedere al BackOffice
+  // da richiedere 
+  private apiUrl = 'https://api.mockaron.com/mock/bufcwlbupc/categoria-prodotto'; 
 
   array: Categoria[] = []
   categoriaSelezionataSubject = new Subject<Categoria>();

@@ -18,8 +18,7 @@
       <h2 (click)="cliccaCategoria(categoriaSelezionata)">{{ categoriaSelezionata.name }}</h2>
       <div class="card-grid">
         <div class="card" *ngFor="let prodottoCategoria of categoriaSelezionata.prodotti">
-          <!--<img [src]="prodottoCategoria.img" alt="Prodotto">-->
-          <img src="https://placehold.co/400" alt="Prodotto">
+          <img [src]="prodottoCategoria.percorsoImmagine" alt="Prodotto">
           <h4>{{ prodottoCategoria.nome}}</h4>
           <p>Quantità: {{ prodottoCategoria.quantita }}</p>
           <button (click)="aggiungiAllaLista(prodottoCategoria)">+</button>

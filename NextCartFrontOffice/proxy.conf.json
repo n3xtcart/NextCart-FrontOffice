@@ -1,0 +1,12 @@
+{
+    "/mock": {
+      "target": "https://api.mockaron.com/*",
+      "secure": true,
+      "changeOrigin": true,
+      "logLevel": "debug",
+      "pathRewrite": {
+        "^/mock": ""
+      }
+    }
+  }
+  

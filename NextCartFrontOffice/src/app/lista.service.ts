@@ -1,7 +1,7 @@
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
 import { Lista } from './_models/lista';
 import { ProdottoListaSpesa } from './_models/prodottoListaSpesa';
 
@@ -19,9 +19,9 @@ export class ListaService {
   liste$ = this.listeSubject.asObservable();
   
   
-
-  private apiUrl = 'https://6826ef9b397e48c91317d97b.mockapi.io/lista'; // da richiedere al BackOffice
-  
+// da richiedere
+  private apiUrl = 'https://api.mockaron.com/mock/bufcwlbupc/la-mia-lista'; 
+  private POST = 'https://api.mockaron.com/mock/bufcwlbupc/nuova-lista';
   
 
   constructor(private http: HttpClient) {
@@ -31,15 +31,15 @@ export class ListaService {
   }
 
   getListe(): Observable<Lista[]> {
-    return new Observable(observer => {
-      this.http.get<Lista[]>(this.apiUrl).subscribe(listeApi => {
+    return this.http.get<Lista[]>(this.apiUrl).pipe(
+      tap(listeApi => {
         this.liste = listeApi;
-        this.listeSubject.next(this.liste); // aggiorna i componenti
-        observer.next(this.liste);
-        observer.complete();
-      });
-    });
+        this.listeSubject.next([...this.liste]);
+        this.salva();
+      })
+    );
   }
+  
   
 
   private salva(): void {
@@ -69,7 +69,7 @@ export class ListaService {
     }
   }
 
-  creaLista(nomeLista: string): void {
+  /*creaLista(nomeLista: string): void {
     const nuovaLista: Lista = {
       idLista: this.generaIdUnico(),  
       nomeLista: nomeLista,
@@ -85,8 +85,44 @@ export class ListaService {
 
   generaIdUnico(): number {
     return this.liste.length > 0 ? Math.max(...this.liste.map(l => l.idLista)) + 1 : 1;
-  }
+  }*/
   
-  
+    creaLista(nomeLista: string): Observable<Lista> {
+      return this.creaListaApi(nomeLista);
+    }    
+
+    creaListaApi(nomeLista: string): Observable<Lista> {
+      const nuovaLista: Lista = {
+        nomeLista: nomeLista,
+        dataPrevista: new Date(),
+        prodotti: [],
+        idLista: 0
+      };
+    
+      let options = {
+        headers: new HttpHeaders({
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'authkey',
+          'userid': '1'
+        })
+      };
+    
+      return this.http.post<Lista>(this.POST, nuovaLista, options).pipe(
+        switchMap(listaCreata => {
+          listaCreata.nomeLista = nomeLista;
+    
+          return this.getListe().pipe(
+            tap(() => {
+              this.selezionaLista(listaCreata.nomeLista);
+              this.salva();
+              console.log("Lista creata: " + listaCreata.nomeLista);
+            }),
+            map(() => listaCreata) 
+          );
+        })
+      );
+    }
+    
+    
   
 }
