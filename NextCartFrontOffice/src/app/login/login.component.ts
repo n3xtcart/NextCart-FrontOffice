@@ -1,32 +1,46 @@
-import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
 
-
   email: string = '';
   password: string = '';
+  erroreLogin: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  accedi() {
-    this.router.navigate(['/home']);
-  }
-  
   onSubmit() {
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
-
-    // logica per inviare i dati al backend quando sarà pronto
+    console.log('Tentativo di login con:', this.email, this.password); 
+    this.authService.login(this.email, this.password).subscribe(
+      response => {
+        if (response.status === 'success') {
+          this.erroreLogin = false;
+          localStorage.setItem('token', response.token); 
+          this.router.navigate(['/home']);
+        } else {
+          this.erroreLogin = true;
+        }
+      },
+      error => {
+        console.error('Errore nella chiamata API:', error);
+        this.erroreLogin = true;
+      }
+    );
   }
+
+
+
 }
+
 
 
 

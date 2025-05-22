@@ -68,8 +68,6 @@ export class NavbarLatComponent implements OnInit {
       this.nomeNuovaLista = '';
     });
   }
-  
-  
 
   selezionaLista(lista: Lista) {
     this.listaService.selezionaLista(lista.nomeLista);

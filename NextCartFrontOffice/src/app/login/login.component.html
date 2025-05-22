@@ -1,7 +1,9 @@
 <div class="container">
   <div class="login-section">
-    <div class="logo"> <img src="/assets/NEXTR3CART.png" alt="logo" id="logo"/>  </div>
-     
+    <div class="logo">
+      <img src="/assets/NEXTR3CART.png" alt="logo" id="logo" />
+    </div>
+
     <h3>Accedi</h3>
     <form (ngSubmit)="onSubmit()" #loginForm="ngForm" id="form">
       <div class="form-group">
@@ -26,14 +28,22 @@
           placeholder="Inserisci la tua password"
         />
       </div>
-      <button type="submit" [disabled]="!loginForm.form.valid" (click)="accedi()">Accedi</button>
-      <div class="crea-account">
-        <a href="/registrazione">Crea un account</a>
+
+      <button type="submit" [disabled]="!loginForm.form.valid">Accedi</button>
+
+      <div *ngIf="erroreLogin" style="color: red; margin-top: 10px;">
+        Email o password errati.
+      </div>
+
+      <div class="crea-account" style="margin-top: 15px;">
+        <a routerLink="/registrazione">Crea un account</a>
       </div>
     </form>
   </div>
+
   <div class="image-section">
-    <img src="/assets/spesa.jpg" alt="Shopping" />  
+    <img src="/assets/spesa.jpg" alt="Shopping" />
   </div>
 </div>
+
   

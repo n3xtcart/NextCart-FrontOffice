@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-profilo',
@@ -9,14 +10,16 @@ import { Router } from '@angular/router';
   styleUrl: './profilo.component.css'
 })
 export class ProfiloComponent {
-  email: string = 'utente@example.com'; // Valore predefinito
-  password: string = '********'; // Valore predefinito
+  email: string = 'test@mail.com'; 
+  password: string = '****'; 
 
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
+
 
   logout() {
-    // Logica per il logout, come rimuovere il token, reindirizzare, ecc.
-    this.router.navigate(['/login']);
-    
-  }
+  this.authService.logout().subscribe({
+    next: () => console.log('Logout effettuato con successo'),
+    error: err => console.error('Errore nel logout:', err)
+  });
+}
 }
