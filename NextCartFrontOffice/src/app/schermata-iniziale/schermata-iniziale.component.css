@@ -1,0 +1,34 @@
+.welcome-container {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.welcome-container h2 {
+  color:#034051;
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.welcome-container p {
+  font-size: 2.1rem;
+  color: #ff9f31;
+  margin-bottom: 20px;
+}
+
+.welcome-container img {
+  width: 120px;
+  height: auto;
+  margin-top: 10px;
+  opacity: 0.9;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

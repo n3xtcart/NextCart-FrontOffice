@@ -1,5 +1,8 @@
 <div class="container">
   <main class="content">
+          <button class="elimina-btn" (click)="eliminaLista()">
+        X Elimina lista
+      </button>
     <h2>{{ listaSelezionata?.nomeLista }}</h2>
 
     <table class="lista-table" *ngIf="listaSelezionata">

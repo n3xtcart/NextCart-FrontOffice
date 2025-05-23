@@ -5,22 +5,26 @@ import { ProfiloComponent } from './profilo/profilo.component';
 import { CategoriaProdottoComponent } from './categoria-prodotto/categoria-prodotto.component';
 import { LaMiaListaComponent } from './la-mia-lista/la-mia-lista.component';
 import { HomeComponent } from './home/home.component';
+import { authGuard } from './auth.guard';
+import { SchermataInizialeComponent } from './schermata-iniziale/schermata-iniziale.component';
 
 
 
 
 export const routes: Routes = [
-    { path: '', component: LoginComponent },
-    { path: 'profilo', component: ProfiloComponent},
-    {
-      path: 'home', component: HomeComponent,
-      children: [
-        { path: 'categoria-prodotto', component: CategoriaProdottoComponent },
-        { path: 'la-mia-lista', component: LaMiaListaComponent }
-      ]
-    },
-    { path: '**', redirectTo: '' }
-  ];
-
+  { path: '', component: LoginComponent },
+  { path: 'profilo', component: ProfiloComponent, canActivate: [authGuard] },
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: SchermataInizialeComponent }, 
+      { path: 'categoria-prodotto', component: CategoriaProdottoComponent },
+      { path: 'la-mia-lista', component: LaMiaListaComponent }
+    ]
+  },
+  { path: '**', redirectTo: '' }
+];
 
 

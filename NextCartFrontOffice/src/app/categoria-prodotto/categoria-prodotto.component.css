@@ -1,13 +1,49 @@
-.container {
+/* Contenitore header con nome categoria e controlli allineati a destra */
+.categoria-header {
   display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background: #f9f9f9;
-  font-family: Arial, sans-serif;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #ddd;
 }
 
-.content {
-  flex: 1;
+.categoria-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Controlli ordina e vista */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.controls select {
+  padding: 6px 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.controls button {
+  padding: 6px 14px;
+  font-size: 1rem;
+  background-color: #ff9f31;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.controls button:hover {
+  background-color: #034051;
 }
 
 .card-grid {
@@ -16,6 +52,32 @@
   gap: 20px;
   width: 100%;
   box-sizing: border-box;
+}
+
+.card-list {
+  display: block;
+}
+
+.card-list .card {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  text-align: left;
+}
+
+.card-list .card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+.card-list .card .info {
+  flex-grow: 1;
 }
 
 .card {
@@ -32,7 +94,6 @@
   object-fit: cover;
   border-radius: 5px;
 }
-
 
 .indietro-btn {
   background-color: #eeeeee;
@@ -61,6 +122,7 @@
   transition: background-color 0.3s, transform 0.2s;
   line-height: 1; 
 }
+
 .card button:hover {
   background-color: #45a049;
   transform: scale(1.05);
@@ -69,6 +131,4 @@
 .card button:active {
   transform: scale(0.95);
 }
-
-
 

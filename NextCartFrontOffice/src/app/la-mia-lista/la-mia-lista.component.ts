@@ -16,7 +16,6 @@ import { ProdottoListaSpesa } from '../_models/prodottoListaSpesa';
 })
 
 
-
 export class LaMiaListaComponent implements OnInit, OnDestroy {
   listaSelezionata: Lista | null = null;
   private subscription!: Subscription;
@@ -31,7 +30,6 @@ export class LaMiaListaComponent implements OnInit, OnDestroy {
       }
     });
   
-    // Iniziale fallback: carica tutte le liste se nulla è stato selezionato
     this.listaService.getListe().subscribe({
       next: (data) => {
         if (data.length > 0 && !this.listaSelezionata) {
@@ -49,9 +47,33 @@ export class LaMiaListaComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  rimuoviProdotto(prodotto: ProdottoListaSpesa) {
+rimuoviProdotto(prodotto: ProdottoListaSpesa) {
+  if (this.listaSelezionata) {
+    const conferma = confirm(`Vuoi rimuovere "${prodotto.nomeProdotto}" dalla lista?`);
+    if (conferma) {
+      this.listaService.rimuoviProdottoApi(this.listaSelezionata.idLista, prodotto.idProdottoLista).subscribe({
+        next: () => console.log('Prodotto rimosso'),
+        error: err => console.error('Errore nella rimozione del prodotto:', err)
+      });
+    }
+  }
+}
+
+
+  eliminaLista() {
     if (this.listaSelezionata) {
-      this.listaService.rimuoviProdotto(this.listaSelezionata.nomeLista, prodotto);
+      const conferma = confirm(`Vuoi davvero eliminare la lista "${this.listaSelezionata.nomeLista}"?`);
+      if (conferma) {
+        this.listaService.eliminaListaApi(this.listaSelezionata.idLista).subscribe({
+          next: () => {
+            this.listaSelezionata = null;
+            console.log('Lista eliminata con successo');
+          },
+          error: (err) => {
+            console.error('Errore durante l\'eliminazione della lista:', err);
+          }
+        });
+      }
     }
   }
 

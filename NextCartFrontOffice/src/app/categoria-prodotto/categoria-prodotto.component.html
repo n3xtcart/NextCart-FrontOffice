@@ -9,18 +9,34 @@
         </div>
       </div>
     </div>
-    
 
     <div *ngIf="categoriaSelezionata">
-      <button class="indietro-btn" (click)="deselezionaCategoria()">
-        ← Torna alle categorie
-      </button>
-      <h2 (click)="cliccaCategoria(categoriaSelezionata)">{{ categoriaSelezionata.name }}</h2>
-      <div class="card-grid">
+      <button class="indietro-btn" (click)="deselezionaCategoria()">← Torna alle categorie</button>
+
+      <div class="categoria-header">
+        <h2>{{ categoriaSelezionata.name }}</h2>
+
+        <div class="controls">
+          <label>Ordina per:
+            <select [(ngModel)]="criterioOrdinamento" (change)="ordinaProdotti()">
+              <option value="nome">Nome</option>
+              <option value="quantita">Quantità</option>
+            </select>
+          </label>
+
+          <button (click)="vistaGriglia = !vistaGriglia">
+            {{ vistaGriglia ? 'Vista a lista' : 'Vista a griglia' }}
+          </button>
+        </div>
+      </div>
+
+      <div [ngClass]="vistaGriglia ? 'card-grid' : 'card-list'">
         <div class="card" *ngFor="let prodottoCategoria of categoriaSelezionata.prodotti">
           <img [src]="prodottoCategoria.percorsoImmagine" alt="Prodotto">
-          <h4>{{ prodottoCategoria.nome}}</h4>
-          <p>Quantità: {{ prodottoCategoria.quantita }}</p>
+          <div class="info">
+            <h4>{{ prodottoCategoria.nome }}</h4>
+            <p>Quantità: {{ prodottoCategoria.quantita }}</p>
+          </div>
           <button (click)="aggiungiAllaLista(prodottoCategoria)">+</button>
         </div>
       </div>
