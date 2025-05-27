@@ -13,11 +13,10 @@ import { SchermataInizialeComponent } from './schermata-iniziale/schermata-inizi
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
+  { path: 'registrazione', component: RegistrazioneComponent },
   { path: 'profilo', component: ProfiloComponent, canActivate: [authGuard] },
   {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [authGuard],
+    path: 'home', component: HomeComponent, canActivate: [authGuard],
     children: [
       { path: '', component: SchermataInizialeComponent }, 
       { path: 'categoria-prodotto', component: CategoriaProdottoComponent },

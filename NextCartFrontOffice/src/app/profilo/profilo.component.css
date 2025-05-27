@@ -67,7 +67,39 @@
   .logout-section button {
     width: 100%;
     padding: 12px;
+    background-color: #3540dc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+    .aggiorna-section button {
+    width: 100%;
+    padding: 12px;
+    background-color: #dc8335;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+    .elimina-section button {
+    width: 100%;
+    padding: 12px;
     background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+    .salva-section button {
+    width: 100%;
+    padding: 12px;
+    background-color: #35dc3b;
     color: white;
     border: none;
     border-radius: 4px;

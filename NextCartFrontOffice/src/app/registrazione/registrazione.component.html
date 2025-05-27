@@ -6,6 +6,28 @@
     <h3>Registrazione</h3>
     <form (ngSubmit)="onSubmit()" #registrazioneForm="ngForm">
       <div>
+        <label for="nome">Nome</label>
+        <input
+          type="nome"
+          id="nome"
+          name="nome"
+          [(ngModel)]="nome"
+          required
+          placeholder="Inserisci il tuo nome"
+        />
+      </div>
+      <div>
+        <label for="cognome">Cognome</label>
+        <input
+          type="cognome"
+          id="cognome"
+          name="cognome"
+          [(ngModel)]="cognome"
+          required
+          placeholder="Inserisci il tuo cognome"
+        />
+      </div>
+      <div>
         <label for="email">Email</label>
         <input
           type="email"
