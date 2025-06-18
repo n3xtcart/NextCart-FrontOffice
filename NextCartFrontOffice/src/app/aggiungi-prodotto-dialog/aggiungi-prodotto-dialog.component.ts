@@ -3,6 +3,7 @@ import { ListaService } from '../lista.service';
 import { Lista } from '../_models/lista'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ProdottoListaSpesa } from '../_models/prodottoListaSpesa';
 
 @Component({
   selector: 'app-aggiungi-prodotto-dialog',
@@ -17,14 +18,13 @@ export class AggiungiProdottoDialogComponent implements OnInit {
   @Output() chiudi = new EventEmitter<void>();
   @Output() confermaAggiunta = new EventEmitter<any>();
 
-  tipologieDisponibili = ['grammi', 'confezione'];
-  tipologia: string = 'grammi';
   quantita: number = 1;
   note: string = '';
 
   listeSpesa: Lista[] = [];
   listaSelezionata: string = '';
   nuovaListaNome: string = '';
+  nuovaListaData: string = '';
 
   constructor(private listaService: ListaService) {}
 
@@ -41,26 +41,35 @@ export class AggiungiProdottoDialogComponent implements OnInit {
 
 
   conferma() {
-    const nomeLista =
-      this.listaSelezionata === '__new__' ? this.nuovaListaNome : this.listaSelezionata;
-  
-    if (this.listaSelezionata === '__new__' && this.nuovaListaNome.trim() !== '') {
-      this.listaService.creaLista(this.nuovaListaNome.trim())
-    }
-  
-    const prodottoFormattato = {
+    const nomeLista = this.listaSelezionata === '__new__' ? this.nuovaListaNome.trim() : this.listaSelezionata;
+
+    const prodottoFormattato: ProdottoListaSpesa = {
+      idProdottoShop: this.prodotto.id,                
+      idProdottoLista: 0,                              
       nomeProdotto: this.prodotto.nome,
       categoriaProdotto: this.prodotto.categoria.nome,
-      tipologiaProdotto: this.tipologia,
       quantitaProdotto: this.quantita,
       noteProdotto: this.note,
       checkedProdotto: false
     };
-  
-    this.confermaAggiunta.emit({ nomeLista, prodotto: prodottoFormattato });
-    console.log("Lista creata: " , nomeLista)
-  }
 
+    const aggiungiProdottoEFaiEmit = (idLista: number) => {
+      this.listaService.aggiungiProdottoALista(idLista, prodottoFormattato).subscribe(() => {
+        this.confermaAggiunta.emit({ nomeLista, prodotto: prodottoFormattato });
+      });
+    };
+    if (this.listaSelezionata === '__new__' && nomeLista !== '' && this.nuovaListaData !== '') {
+      this.listaService.creaLista(nomeLista, this.nuovaListaData).subscribe((nuovaLista) => {
+        this.listeSpesa.push(nuovaLista.listeSpesa[0]);
+        aggiungiProdottoEFaiEmit(nuovaLista.listeSpesa[0].idLista);
+      });
+    } else if (nomeLista !== '') {
+      const lista = this.listeSpesa.find(l => l.nomeLista === nomeLista);
+      if (lista?.idLista) {
+        aggiungiProdottoEFaiEmit(lista.idLista);
+      }
+    }
+  }
 
 
 }  

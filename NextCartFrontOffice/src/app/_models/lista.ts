@@ -4,6 +4,6 @@ export interface Lista {
 
 	idLista: number;
 	nomeLista: string;       
-	dataPrevista: Date;
+	dataPrevista: string;
 	prodotti: ProdottoListaSpesa[];
 }

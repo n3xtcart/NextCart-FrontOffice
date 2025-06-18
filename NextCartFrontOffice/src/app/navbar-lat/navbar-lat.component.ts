@@ -20,6 +20,8 @@ export class NavbarLatComponent implements OnInit {
   listaSelezionata: Lista | null = null;
   nomeNuovaLista: string = '';
   categorie: any[] = [];
+  dataNuovaLista: string = '';
+
 
   constructor(
     private listaService: ListaService,
@@ -62,12 +64,16 @@ export class NavbarLatComponent implements OnInit {
 
   creaNuovaLista() {
     const nome = this.nomeNuovaLista.trim();
-    if (!nome || this.tutteLeListe.find(l => l.nomeLista === nome)) return;
-  
-    this.listaService.creaLista(nome).subscribe(() => {
+    const data = this.dataNuovaLista.trim();
+
+    if (!nome || !data || this.tutteLeListe.find(l => l.nomeLista === nome)) return;
+
+    this.listaService.creaLista(nome, data).subscribe(() => {
       this.nomeNuovaLista = '';
+      this.dataNuovaLista = '';
     });
   }
+
 
   selezionaLista(lista: Lista) {
     this.listaService.selezionaLista(lista.nomeLista);

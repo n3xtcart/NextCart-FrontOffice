@@ -46,8 +46,8 @@ export class CategoriaProdottoComponent implements OnInit {
     this.prodottoSelezionato = prodotto;
   }
 
-  aggiungiProdotto(event: { nomeLista: string, prodotto: any }) {
-    this.listaService.aggiungiProdottoALista(event.nomeLista, event.prodotto);
+  aggiungiProdotto(event: { idLista: number, nomeLista: string, prodotto: any }) {
+    this.listaService.aggiungiProdottoALista(event.idLista, event.prodotto);
     this.prodottoSelezionato = null;
   }
 

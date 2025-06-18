@@ -1,7 +1,7 @@
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, forkJoin, map, Observable, switchMap, tap } from 'rxjs';
 import { Lista } from './_models/lista';
 import { ProdottoListaSpesa } from './_models/prodottoListaSpesa';
 
@@ -19,10 +19,9 @@ export class ListaService {
   liste$ = this.listeSubject.asObservable();
   
   
-// da richiedere
-  private GET = 'https://api.mockaron.com/mock/bufcwlbupc/la-mia-lista'; 
-  private POST = 'https://api.mockaron.com/mock/bufcwlbupc/nuova-lista';
-  private DELETE = 'https://api.mockaron.com/mock/bufcwlbupc/la-mia-lista';
+  private GET = 'http://localhost:8080/liste-spesa/utente'; 
+  private POST = 'http://localhost:8080/liste-spesa';
+  private DELETE = 'http://localhost:8080/liste-spesa/';
   
 
   constructor(private http: HttpClient) {
@@ -32,19 +31,24 @@ export class ListaService {
   }
 
   getListe(): Observable<Lista[]> {
-    return this.http.get<Lista[]>(this.GET).pipe(
-      tap(listeApi => {
-        this.liste = listeApi;
+
+    return this.http.get<{ listeSpesa: Lista[] }>(this.GET).pipe(
+      map(response => response.listeSpesa),
+      switchMap(liste => {
+        const listeConProdotti$ = liste.map(lista =>{
+          console.log(lista);
+          
+    return this.http.get<Lista>(`http://localhost:8080/liste-spesa/${lista.idLista}`)
+
+        }
+        );
+        return forkJoin(listeConProdotti$);
+      }),
+      tap(listeComplete => {
+        this.liste = listeComplete;
         this.listeSubject.next([...this.liste]);
-        this.salva();
       })
     );
-  }
-  
-  
-
-  private salva(): void {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.liste));
   }
 
   selezionaLista(nomeLista: string): void {
@@ -52,72 +56,101 @@ export class ListaService {
     this.listaCorrenteSubject.next(lista);
   }
 
-  aggiungiProdottoALista(nomeLista: string, prodotto: ProdottoListaSpesa): void {
-    const lista = this.liste.find(l => l.nomeLista === nomeLista);
-    if (lista) {
-      lista.prodotti.push(prodotto);
-      this.salva();
-      this.listaCorrenteSubject.next({ ...lista });
-    }
+  aggiungiProdottoALista(idLista: number, prodotto: ProdottoListaSpesa): Observable<any> {
+    const body = {
+      idProdottoShop: prodotto.idProdottoShop,
+      quantitaProdotto: prodotto.quantitaProdotto,
+      noteProdotto: prodotto.noteProdotto,
+      checkedProdotto: prodotto.checkedProdotto
+    };
+
+    return this.http.post(`http://localhost:8080/liste/${idLista}/prodotti`, body);
   }
 
+  aggiornaProdottoApi(idProdottoLista: number, prodotto: ProdottoListaSpesa): Observable<any> {
+  const url = `http://localhost:8080/liste/prodotti/${idProdottoLista}`;
+  const body = {
+    idProdottoShop: prodotto.idProdottoShop,
+    noteProdotto: prodotto.noteProdotto,
+    quantitaProdotto: prodotto.quantitaProdotto,
+    checkedProdotto: prodotto.checkedProdotto
+  };
+
+  return this.http.put(url, body).pipe(
+    tap(() => {
+      const lista = this.liste.find(l => l.prodotti.some(p => p.idProdottoLista === idProdottoLista));
+      if (lista) {
+        const index = lista.prodotti.findIndex(p => p.idProdottoLista === idProdottoLista);
+        if (index !== -1) {
+          lista.prodotti[index] = { ...lista.prodotti[index], ...body };
+          this.listaCorrenteSubject.next({ ...lista });
+        }
+      }
+    })
+  );
+}
+
+
   rimuoviProdottoApi(idLista: number, idProdottoLista: number): Observable<any> {
-    const url = `${this.GET}/${idLista}/prodotti/${idProdottoLista}`;
+    const url = `http://localhost:8080/liste/prodotti/${idProdottoLista}`;
     return this.http.delete(url).pipe(
       tap(() => {
         const lista = this.liste.find(l => l.idLista === idLista);
         if (lista) {
           lista.prodotti = lista.prodotti.filter(p => p.idProdottoLista !== idProdottoLista);
           this.listaCorrenteSubject.next({ ...lista });
-          this.salva();
         }
       })
     );
   }
 
   
-    creaLista(nomeLista: string): Observable<Lista> {
-      return this.creaListaApi(nomeLista);
-    }    
+  creaLista(nomeLista: string, dataPrevista: string): Observable<{ listeSpesa: Lista[] }> {
+      return this.creaListaApi(nomeLista, dataPrevista);
+  }
+   
 
-    creaListaApi(nomeLista: string): Observable<Lista> {
-      const nuovaLista: Lista = {
-        nomeLista: nomeLista,
-        dataPrevista: new Date(),
-        prodotti: [],
-        idLista: 0
-      };
-    
-      let options = {
-        headers: new HttpHeaders({
-          'Access-Control-Allow-Origin': '*',
-          'Authorization': 'authkey',
-          'userid': '1'
-        })
-      };
-    
-      return this.http.post<Lista>(this.POST, nuovaLista, options).pipe(
+  creaListaApi(nomeLista: string, dataPrevista: string): Observable<{ listeSpesa: Lista[] }> {
+
+    const nuovaLista: Lista = {
+      nomeLista: nomeLista,
+      dataPrevista: dataPrevista, 
+      prodotti: [],
+      idLista: 0
+    };
+
+    const options = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'authkey',
+        'userid': '23'
+      })
+    };
+
+      return this.http.post<{ listeSpesa: Lista[] }>(this.POST, nuovaLista, options).pipe(
         switchMap(listaCreata => {
-          listaCreata.nomeLista = nomeLista;
-    
+          console.log(listaCreata);
+          console.log('Lista creata con ID:', listaCreata.listeSpesa[0].idLista);
+
+          listaCreata.listeSpesa[0].nomeLista = nomeLista;
+
           return this.getListe().pipe(
             tap(() => {
-              this.selezionaLista(listaCreata.nomeLista);
-              this.salva();
-              console.log("Lista creata: " + listaCreata.nomeLista);
+              this.selezionaLista(listaCreata.listeSpesa[0].nomeLista);
+              console.log("Lista creata: " + listaCreata.listeSpesa[0].nomeLista);
             }),
-            map(() => listaCreata) 
+            map(() => listaCreata)
           );
         })
       );
     }
+
     
     eliminaListaApi(idLista: number): Observable<any> {
     return this.http.delete(`${this.DELETE}/${idLista}`).pipe(
       tap(() => {
         this.liste = this.liste.filter(lista => lista.idLista !== idLista);
         this.listeSubject.next([...this.liste]);
-        this.salva();
 
         const listaSelezionata = this.listaCorrenteSubject.value;
         if (listaSelezionata && listaSelezionata.idLista === idLista) {

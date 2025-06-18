@@ -24,9 +24,12 @@ export class LaMiaListaComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.listaService.listaCorrente$.subscribe(lista => {
+      
       if (lista) {
         this.listaSelezionata = lista;
-        console.log('Lista selezionata aggiornata:', lista);
+      console.log('Lista selezionata aggiornata:', this.listaSelezionata);
+          console.log(this.listaSelezionata.prodotti);
+          
       }
     });
   
@@ -47,17 +50,46 @@ export class LaMiaListaComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-rimuoviProdotto(prodotto: ProdottoListaSpesa) {
-  if (this.listaSelezionata) {
-    const conferma = confirm(`Vuoi rimuovere "${prodotto.nomeProdotto}" dalla lista?`);
-    if (conferma) {
-      this.listaService.rimuoviProdottoApi(this.listaSelezionata.idLista, prodotto.idProdottoLista).subscribe({
-        next: () => console.log('Prodotto rimosso'),
-        error: err => console.error('Errore nella rimozione del prodotto:', err)
-      });
+aggiornaProdotto(prodotto: ProdottoListaSpesa) {
+  if (prodotto.idProdottoLista != null) {
+    
+    const maxQuantita = prodotto.quantitaProdotto ?? 0;
+    if (prodotto.quantitaProdotto > maxQuantita) {
+      alert(`Quantità massima disponibile per questo prodotto è ${maxQuantita}.`);
+      return; 
     }
+
+    const payload = {
+      idProdottoShop: prodotto.idProdottoShop,
+      quantitaProdotto: prodotto.quantitaProdotto,
+      noteProdotto: prodotto.noteProdotto,
+      checkedProdotto: prodotto.checkedProdotto
+    };
+
+    this.listaService.aggiornaProdottoApi(prodotto.idProdottoLista, payload).subscribe({
+      next: () => console.log(`Prodotto ${prodotto.nomeProdotto} aggiornato`),
+      error: err => console.error('Errore aggiornamento prodotto:', err)
+    });
   }
 }
+
+
+  rimuoviProdotto(prodotto: ProdottoListaSpesa) {
+    if (this.listaSelezionata) {
+      const conferma = confirm(`Vuoi rimuovere "${prodotto.nomeProdotto}" dalla lista?`);
+      if (conferma) {
+        if (prodotto.idProdottoLista != null) {
+          this.listaService.rimuoviProdottoApi(this.listaSelezionata.idLista, prodotto.idProdottoLista).subscribe({
+            next: () => console.log('Prodotto rimosso'),
+            error: err => console.error('Errore nella rimozione del prodotto:', err)
+          });
+        } else {
+          console.warn('Impossibile rimuovere il prodotto: idProdottoLista non è definito');
+        }
+      }
+    }
+  }
+
 
 
   eliminaLista() {

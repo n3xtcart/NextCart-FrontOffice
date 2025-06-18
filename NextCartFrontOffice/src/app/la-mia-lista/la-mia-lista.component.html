@@ -1,18 +1,31 @@
 <div class="container">
   <main class="content">
-          <button class="elimina-btn" (click)="eliminaLista()">
+    <button class="elimina-btn" (click)="eliminaLista()">
         X Elimina lista
-      </button>
-    <h2>{{ listaSelezionata?.nomeLista }}</h2>
+    </button>
+    <div>
+      <h2>{{ listaSelezionata?.nomeLista }}</h2>
+      <p>Data prevista: {{ listaSelezionata?.dataPrevista }}</p>
+    </div>
 
     <table class="lista-table" *ngIf="listaSelezionata">
       <tr *ngFor="let prodotto of listaSelezionata.prodotti">
         <td>
-          <input type="checkbox" [(ngModel)]="prodotto.checkedProdotto">
+          <input type="checkbox"
+                 [(ngModel)]="prodotto.checkedProdotto"
+                 (change)="aggiornaProdotto(prodotto)">
         </td>
         <td>{{ prodotto.nomeProdotto }}</td>
-        <td>{{ prodotto.noteProdotto }}</td>
-        <td>{{ prodotto.quantitaProdotto }}</td>
+        <td>
+          <input type="text"
+                 [(ngModel)]="prodotto.noteProdotto"
+                 (blur)="aggiornaProdotto(prodotto)">
+        </td>
+        <td>
+          <input type="number"
+                 [(ngModel)]="prodotto.quantitaProdotto"
+                 (blur)="aggiornaProdotto(prodotto)">
+        </td>
         <td>
           <button (click)="rimuoviProdotto(prodotto)">X</button>
         </td>
@@ -20,4 +33,5 @@
     </table>
   </main>
 </div>
+
 
