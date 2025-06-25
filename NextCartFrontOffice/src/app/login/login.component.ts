@@ -16,19 +16,19 @@ export class LoginComponent {
   password: string = '';
   erroreLogin: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   onSubmit() {
-    console.log('Tentativo di login con:', this.email, this.password); 
+    console.log('Tentativo di login con:', this.email, this.password);
     this.authService.login(this.email, this.password).subscribe(
       response => {
-        if (response.status === 'success') {
-          this.erroreLogin = false;
-          localStorage.setItem('token', response.token); 
-          this.router.navigate(['/home']);
-        } else {
-          this.erroreLogin = true;
-        }
+        console.log(response);
+
+
+        this.authService.token = response;
+        localStorage.setItem('token', response.token);
+        this.router.navigate(['/home']);
+
       },
       error => {
         console.error('Errore nella chiamata API:', error);

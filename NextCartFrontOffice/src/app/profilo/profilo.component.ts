@@ -22,10 +22,7 @@ export class ProfiloComponent {
 
 
   logout() {
-  this.authService.logout().subscribe({
-    next: () => console.log('Logout effettuato con successo'),
-    error: err => console.error('Errore nel logout:', err)
-  });
+  this.authService.logout();
 }
   aggiorna() {
   this.isEditable = true;

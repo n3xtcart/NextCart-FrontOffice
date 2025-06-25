@@ -8,27 +8,30 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  private LOGIN = 'https://api.mockaron.com/mock/bufcwlbupc/login'; 
-  private LOGOUT = 'https://api.mockaron.com/mock/bufcwlbupc/logout';
-  private REG = 'https://api.mockaron.com/mock/bufcwlbupc/register';
-  private AGG = 'https://api.mockaron.com/mock/bufcwlbupc/users/:id';
-  private DEL = 'https://api.mockaron.com/mock/bufcwlbupc/users/:id';
+  private LOGIN = 'http://192.168.10.216:8080/users/login';
+  // private LOGOUT = 'https://api.mockaron.com/mock/bufcwlbupc/logout';
+  private REG = 'http://192.168.10.216:8080/users/register';
+  private AGG = 'http://192.168.10.216:8080/users'; // PUT
+  private DEL = 'http://192.168.10.216:8080/users';
 
+  token: { accessToken: string, refreshToken: string }
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this.token = {
+      "accessToken":'',
+      "refreshToken":''
+    }
+   }
 
   login(email: string, password: string): Observable<any> {
     return this.http.post<any>(this.LOGIN, { email, password });
   }
 
-  logout(): Observable<any> {
-    return this.http.post<any>(this.LOGOUT, {}).pipe(
-      tap(() => {
-        localStorage.removeItem('token');
-        this.router.navigate(['/login']);
-      })
-    );
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
+
 
   register(nome: string, cognome: string, email: string, password: string): Observable<any> {
     const body = { nome, cognome, email, password };
@@ -36,14 +39,14 @@ export class AuthService {
   }
 
   updateUser(id: string, updatedData: { nome?: string; cognome?: string; email?: string; password?: string }): Observable<any> {
-  return this.http.put<any>(this.AGG, updatedData);
-}
+    return this.http.put<any>(this.AGG, updatedData);
+  }
 
   deleteUser(id: string): Observable<any> {
     return this.http.delete<any>(this.DEL).pipe(
-    tap(() => {
-      this.router.navigate(['/login']);
-    }) 
+      tap(() => {
+        this.router.navigate(['/login']);
+      })
     );
 
   }
