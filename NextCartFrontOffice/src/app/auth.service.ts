@@ -13,7 +13,7 @@ export class AuthService {
   // private LOGOUT = 'https://api.mockaron.com/mock/bufcwlbupc/logout';
   private LOGIN = API_ENDPOINTS.LOGIN;
   private REG = API_ENDPOINTS.REGISTER;
-  private AGG = API_ENDPOINTS.UPDATE_USER; // PUT
+  private AGG = API_ENDPOINTS.UPDATE_USER; 
   private DEL = API_ENDPOINTS.DELETE_USER;
   private REF = API_ENDPOINTS.REFRESH_TOKEN;
 
