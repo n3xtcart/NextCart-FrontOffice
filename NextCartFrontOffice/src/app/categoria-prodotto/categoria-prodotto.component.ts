@@ -3,7 +3,6 @@ import { CategoriaService } from '../categoria.service';
 import { ListaService } from '../lista.service';
 import { CommonModule } from '@angular/common';
 import { Categoria } from '../_models/categoria';
-import { ProdottoListaSpesa } from '../_models/prodottoListaSpesa';
 import { AggiungiProdottoDialogComponent } from "../aggiungi-prodotto-dialog/aggiungi-prodotto-dialog.component";
 import { FormsModule } from '@angular/forms';
 
@@ -24,23 +23,32 @@ export class CategoriaProdottoComponent implements OnInit {
 
   constructor(private categoriaService: CategoriaService, private listaService: ListaService) {}
 
-  ngOnInit() {
-    this.categoriaService.getCategorie().subscribe({
-      next: (data) => {
-        this.categorie = data;
-      },
-      error: (err) => {
-        console.error('Errore nel caricamento:', err);
-      }
-    });
+ngOnInit() {
+  this.categoriaService.getCategorie().subscribe({
+    next: data => this.categorie = data,
+    error: err => console.error(err)
+  });
 
-    this.categoriaService.categoriaSelezionata$.subscribe({
-      next: (categoria) => {
-        this.categoriaSelezionata = categoria;
-        this.ordinaProdotti(); 
+  this.categoriaService.categoriaSelezionata$.subscribe({
+    next: categoria => {
+      this.categoriaSelezionata = categoria;
+      if (categoria && categoria.id) {
+        this.categoriaService.getProdottiPerCategoria(categoria.id).subscribe({
+          next: prodotti => {
+            this.categoriaSelezionata.prodotti = prodotti;
+            this.ordinaProdotti();
+          },
+          error: err => {
+            console.error(err);
+            this.categoriaSelezionata.prodotti = [];
+          }
+        });
+      } else {
+        this.categoriaSelezionata.prodotti = [];
       }
-    });
-  }
+    }
+  });
+}
 
   aggiungiAllaLista(prodotto: any) {
     this.prodottoSelezionato = prodotto;

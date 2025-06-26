@@ -20,25 +20,25 @@ export class LoginComponent {
 
   onSubmit() {
     console.log('Tentativo di login con:', this.email, this.password);
-    this.authService.login(this.email, this.password).subscribe(
-      response => {
-        console.log(response);
+this.authService.login(this.email, this.password).subscribe(
+  response => {
 
-
-        this.authService.token = response;
-        localStorage.setItem('token', response.token);
-        this.router.navigate(['/home']);
-
-      },
-      error => {
-        console.error('Errore nella chiamata API:', error);
-        this.erroreLogin = true;
-      }
-    );
+    if (!response.accessToken || response.accessToken.trim() === '') {
+      this.erroreLogin = true;
+      console.warn('Token vuoto: login fallito');
+      return;
+    }
+    this.authService.token = response;
+    sessionStorage.setItem('accessToken', response.accessToken);
+    sessionStorage.setItem('refreshToken', response.refreshToken);
+    this.router.navigate(['/home']);
+  },
+  error => {
+    console.error('Errore nella chiamata API:', error);
+    this.erroreLogin = true;
   }
-
-
-
+);
+  }
 }
 
 

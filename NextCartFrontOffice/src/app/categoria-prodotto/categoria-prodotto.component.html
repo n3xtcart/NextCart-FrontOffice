@@ -3,9 +3,8 @@
     <div *ngIf="!categoriaSelezionata">
       <div class="card-grid">
         <div class="card" *ngFor="let categoria of categorie" (click)="cliccaCategoria(categoria)">
-          <img src="https://placehold.co/400" alt="Categoria">
-          <h3>{{ categoria.name }}</h3>
-          <p>{{ categoria.numeroProdotti }} prodotti</p>
+          <img src={{categoria.percorsoImmagine}} alt="Categoria">
+          <h3>{{ categoria.nome }}</h3>
         </div>
       </div>
     </div>

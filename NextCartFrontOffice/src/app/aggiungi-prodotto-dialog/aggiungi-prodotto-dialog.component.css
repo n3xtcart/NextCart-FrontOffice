@@ -139,5 +139,46 @@
       font-size: 0.9rem;
     }
   }
+
+  .alert {
+  margin-top: 12px;
+  color: #d9534f; /* rosso bootstrap */
+  background-color: #f8d7da; /* rosa chiaro */
+  border: 1px solid #f5c6cb; /* bordo rosso chiaro */
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.actions button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0 8px;
+  min-width: 100px;
+  transition: background-color 0.3s ease;
+}
+
+.actions button:first-child {
+  background-color: #6c757d;  /* grigio bootstrap */
+  color: white;
+}
+
+.actions button:first-child:hover {
+  background-color: #5a6268;
+}
+
+.actions button:last-child {
+  background-color: #28a745; /* verde bootstrap */
+  color: white;
+}
+
+.actions button:last-child:hover {
+  background-color: #218838;
+}
   
   

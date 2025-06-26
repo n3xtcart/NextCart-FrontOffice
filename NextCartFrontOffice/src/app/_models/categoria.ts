@@ -1,11 +1,7 @@
-import { ProdottoCategoria } from "./prodottoCategoria";
 
 export interface Categoria {
 
     id: number;
-    name: string;
+    nome: string;
     percorsoImmagine: string;
-    numeroProdotti: number;
-    prodotti: ProdottoCategoria[];
-
 }

@@ -35,6 +35,10 @@
             </option>
             <option value="__new__">+ Nuova lista</option>
           </select>
+          
+          <div *ngIf="erroreMessaggio" class="alert alert-danger mt-2">
+            {{ erroreMessaggio }}
+          </div>
         </div>
   
         <div class="form-group" *ngIf="listaSelezionata === '__new__'">

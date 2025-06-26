@@ -1,37 +1,60 @@
+
+<table style="width: 100%; background: transparent; border-collapse: collapse;">
+  <tr>
+    <td style="width: 50%; vertical-align: middle;">
+      <label for="lista-select" class="form-label mb-0 fw-semibold me-2">Lista selezionata:</label>
+      <select id="lista-select"
+              class="form-select form-select-sm"
+              [(ngModel)]="listaSelezionata"
+              (ngModelChange)="onListaChange($event)"
+              style="min-width: 200px;">
+        <option [ngValue]="null" [hidden]="listaSelezionata">-- Seleziona una lista --</option>
+        <option *ngFor="let lista of listeSpesa" [ngValue]="lista">{{ lista.nomeLista }}</option>
+      </select>
+    </td>
+    <td style="width: 50%; text-align: right; vertical-align: middle;">
+      <button class="btn elimina-btn" (click)="eliminaLista()" [disabled]="!listaSelezionata">Elimina lista</button>
+    </td>
+  </tr>
+</table>
+
+    
 <div class="container">
-  <main class="content">
-    <button class="elimina-btn" (click)="eliminaLista()">
-        X Elimina lista
-    </button>
-    <div>
-      <h2>{{ listaSelezionata?.nomeLista }}</h2>
-      <p>Data prevista: {{ listaSelezionata?.dataPrevista }}</p>
-    </div>
+  <main class="content p-3">
 
     <table class="lista-table" *ngIf="listaSelezionata">
-      <tr *ngFor="let prodotto of listaSelezionata.prodotti">
-        <td>
-          <input type="checkbox"
-                 [(ngModel)]="prodotto.checkedProdotto"
-                 (change)="aggiornaProdotto(prodotto)">
-        </td>
-        <td>{{ prodotto.nomeProdotto }}</td>
-        <td>
-          <input type="text"
-                 [(ngModel)]="prodotto.noteProdotto"
-                 (blur)="aggiornaProdotto(prodotto)">
-        </td>
-        <td>
-          <input type="number"
-                 [(ngModel)]="prodotto.quantitaProdotto"
-                 (blur)="aggiornaProdotto(prodotto)">
-        </td>
-        <td>
-          <button (click)="rimuoviProdotto(prodotto)">X</button>
-        </td>
-      </tr>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Prodotto</th>
+          <th>Note</th>
+          <th>Quantità</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prodotto of listaSelezionata.prodotti">
+          <td>
+            <input type="checkbox"
+                   [(ngModel)]="prodotto.checkedProdotto"
+                   (change)="aggiornaProdotto(prodotto)">
+          </td>
+          <td>{{ prodotto.nomeProdotto }}</td>
+          <td>
+            <input type="text"
+                   [(ngModel)]="prodotto.noteProdotto"
+                   (blur)="aggiornaProdotto(prodotto)">
+          </td>
+          <td>
+            <input type="number"
+                   [(ngModel)]="prodotto.quantitaProdotto"
+                   (blur)="aggiornaProdotto(prodotto)">
+          </td>
+          <td>
+            <button (click)="rimuoviProdotto(prodotto)">X</button>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </main>
 </div>
-
-

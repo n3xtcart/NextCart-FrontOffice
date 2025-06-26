@@ -4,10 +4,9 @@ export interface ProdottoCategoria {
 
     id: number;
     nome: string;
-    descrizione: string;
     quantita: number;
     percorsoImmagine: string;
     categoria: Categoria[];
-    tipologia: string;
+    tipologia: string,
 
    }

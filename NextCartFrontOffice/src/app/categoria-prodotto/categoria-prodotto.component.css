@@ -46,6 +46,10 @@
   background-color: #034051;
 }
 
+.card {
+  cursor: pointer;
+}
+
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

@@ -11,7 +11,7 @@
     <aside class="sidebar" *ngIf="isCatPage()">
     <ul *ngIf="dropdownVisible">
       <li *ngFor="let categoria of categorie" (click)="selezionaCategoria(categoria)" class="cliccabile">
-        {{ categoria.name }}
+        {{ categoria.nome }}
       </li>      
     </ul>
   </aside>

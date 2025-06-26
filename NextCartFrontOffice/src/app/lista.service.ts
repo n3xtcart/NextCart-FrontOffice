@@ -4,13 +4,14 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, forkJoin, map, Observable, switchMap, tap } from 'rxjs';
 import { Lista } from './_models/lista';
 import { ProdottoListaSpesa } from './_models/prodottoListaSpesa';
+import { API_ENDPOINTS } from './api-endpoints';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ListaService {
-  private readonly STORAGE_KEY = 'listeUtente';
+
   liste: Lista[] = [];
   private listaCorrenteSubject = new BehaviorSubject<Lista | null>(null);
   listaCorrente$ = this.listaCorrenteSubject.asObservable();
@@ -19,10 +20,9 @@ export class ListaService {
   liste$ = this.listeSubject.asObservable();
   
   
-  private GET = 'http://localhost:8080/liste-spesa/utente'; 
-  private POST = 'http://localhost:8080/liste-spesa';
-  private DELETE = 'http://localhost:8080/liste-spesa/';
-  
+  private OTTIENI_LISTE = API_ENDPOINTS.OTTIENI_LISTE;
+  private LISTA_SPESA = API_ENDPOINTS.LISTA_SPESA;
+  private DETTAGLIO_PRODOTTO = API_ENDPOINTS.DETTAGLIO_PRODOTTO;
 
   constructor(private http: HttpClient) {
     this.getListe().subscribe(liste => {
@@ -32,15 +32,15 @@ export class ListaService {
 
   getListe(): Observable<Lista[]> {
 
-    return this.http.get<{ listeSpesa: Lista[] }>(this.GET).pipe(
+    return this.http.get<{ listeSpesa: Lista[] }>(this.OTTIENI_LISTE).pipe(
       map(response => response.listeSpesa),
       switchMap(liste => {
         const listeConProdotti$ = liste.map(lista =>{
           console.log(lista);
           
-    return this.http.get<Lista>(`http://localhost:8080/liste-spesa/${lista.idLista}`)
+            return this.http.get<Lista>(`${this.LISTA_SPESA}/${lista.idLista}`);
 
-        }
+          }
         );
         return forkJoin(listeConProdotti$);
       }),
@@ -64,11 +64,11 @@ export class ListaService {
       checkedProdotto: prodotto.checkedProdotto
     };
 
-    return this.http.post(`http://localhost:8080/liste/${idLista}/prodotti`, body);
+    return this.http.post(API_ENDPOINTS.LISTA_PRODOTTI(idLista), body);
   }
 
   aggiornaProdottoApi(idProdottoLista: number, prodotto: ProdottoListaSpesa): Observable<any> {
-  const url = `http://localhost:8080/liste/prodotti/${idProdottoLista}`;
+  const url = `${this.DETTAGLIO_PRODOTTO}/${idProdottoLista}`;
   const body = {
     idProdottoShop: prodotto.idProdottoShop,
     noteProdotto: prodotto.noteProdotto,
@@ -92,7 +92,7 @@ export class ListaService {
 
 
   rimuoviProdottoApi(idLista: number, idProdottoLista: number): Observable<any> {
-    const url = `http://localhost:8080/liste/prodotti/${idProdottoLista}`;
+    const url = `${this.DETTAGLIO_PRODOTTO}/${idProdottoLista}`;
     return this.http.delete(url).pipe(
       tap(() => {
         const lista = this.liste.find(l => l.idLista === idLista);
@@ -119,15 +119,15 @@ export class ListaService {
       idLista: 0
     };
 
+    const TOKEN = sessionStorage.getItem('accessToken');
+
     const options = {
       headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': '*',
-        'Authorization': 'authkey',
-        'userid': '23'
+        'Authorization': `Bearer ${TOKEN}`
       })
     };
 
-      return this.http.post<{ listeSpesa: Lista[] }>(this.POST, nuovaLista, options).pipe(
+    return this.http.post<{ listeSpesa: Lista[] }>(this.LISTA_SPESA, nuovaLista, options).pipe(
         switchMap(listaCreata => {
           console.log(listaCreata);
           console.log('Lista creata con ID:', listaCreata.listeSpesa[0].idLista);
@@ -147,7 +147,7 @@ export class ListaService {
 
     
     eliminaListaApi(idLista: number): Observable<any> {
-    return this.http.delete(`${this.DELETE}/${idLista}`).pipe(
+    return this.http.delete(`${this.LISTA_SPESA}/${idLista}`).pipe(
       tap(() => {
         this.liste = this.liste.filter(lista => lista.idLista !== idLista);
         this.listeSubject.next([...this.liste]);
